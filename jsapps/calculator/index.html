@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電卓アプリ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .calculator {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            display: inline-block;
+        }
+        .memory-indicator {
+            height: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 20px;
+        }
+        .display {
+            width: 100%;
+            height: 60px;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            box-sizing: border-box;
+        }
+        .memory-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        .memory {
+            height: 40px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #6c757d;
+            color: white;
+        }
+        .memory:hover {
+            background: #5a6268;
+            transform: scale(1.05);
+        }
+        .memory.active {
+            background: #28a745;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            height: 60px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .number, .decimal {
+            background: #f1f3f4;
+            color: #333;
+        }
+        .operator {
+            background: #ff9500;
+            color: white;
+        }
+        .equals {
+            background: #ff9500;
+            color: white;
+        }
+        .clear {
+            background: #ff3b30;
+            color: white;
+        }
+        .parenthesis {
+            background: #007aff;
+            color: white;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: normal;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h2 style="text-align: center; color: #333; margin-bottom: 20px;">🧮 電卓</h2>
+        <div class="memory-indicator" id="memoryIndicator"></div>
+        <input type="text" class="display" id="display" readonly>
+        
+        <!-- メモリ機能ボタン -->
+        <div class="memory-buttons">
+            <button class="memory" onclick="memoryStore()">MS</button>
+            <button class="memory" onclick="memoryRecall()">MR</button>
+            <button class="memory" onclick="memoryAdd()">M+</button>
+            <button class="memory" onclick="memorySubtract()">M-</button>
+            <button class="memory" onclick="memoryClear()">MC</button>
+        </div>
+        
+        <div class="buttons">
+            <!-- 1行目: C ( ) ← -->
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="parenthesis" onclick="appendToDisplay('(')">(</button>
+            <button class="parenthesis" onclick="appendToDisplay(')')">)</button>
+            <button class="clear" onclick="deleteLast()">←</button>
+            
+            <!-- 2行目: 7 8 9 ÷ -->
+            <button class="number" onclick="appendToDisplay('7')">7</button>
+            <button class="number" onclick="appendToDisplay('8')">8</button>
+            <button class="number" onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('/')">÷</button>
+            
+            <!-- 3行目: 4 5 6 × -->
+            <button class="number" onclick="appendToDisplay('4')">4</button>
+            <button class="number" onclick="appendToDisplay('5')">5</button>
+            <button class="number" onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('*')">×</button>
+            
+            <!-- 4行目: 1 2 3 - -->
+            <button class="number" onclick="appendToDisplay('1')">1</button>
+            <button class="number" onclick="appendToDisplay('2')">2</button>
+            <button class="number" onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+            
+            <!-- 5行目: 0 . = + -->
+            <button class="number" onclick="appendToDisplay('0')">0</button>
+            <button class="decimal" onclick="appendToDisplay('.')">.</button>
+            <button class="equals" onclick="calculate()">=</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+        </div>
+        <a href="/" class="back-link">← メインページに戻る</a>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let memoryIndicator = document.getElementById('memoryIndicator');
+        let currentInput = '';
+        let operator = '';
+        let previousInput = '';
+        let memory = 0; // メモリ変数
+
+        function appendToDisplay(value) {
+            // 括弧や演算子の表示用変換
+            const displayValue = value === '*' ? '×' : value === '/' ? '÷' : value;
+            
+            if (['+', '-', '*', '/', '(', ')'].includes(value)) {
+                // 演算子や括弧の場合
+                if (display.value === '' && value === '-') {
+                    // 負の数の場合
+                    display.value = '-';
+                } else if (display.value !== '') {
+                    display.value += displayValue;
+                }
+            } else {
+                // 数字や小数点の場合
+                display.value += value;
+            }
+            
+            // 入力を保存（計算用）
+            currentInput = display.value;
+        }
+
+        function calculate() {
+            try {
+                if (display.value === '') return;
+                
+                // 表示用記号を計算用記号に変換
+                let expression = display.value
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/');
+                
+                // 括弧の対応チェック
+                const openCount = (expression.match(/\(/g) || []).length;
+                const closeCount = (expression.match(/\)/g) || []).length;
+                
+                if (openCount !== closeCount) {
+                    alert('括弧が正しく対応していません');
+                    return;
+                }
+                
+                // 安全な計算のため、evalの代わりにFunction constructorを使用
+                const result = Function('"use strict"; return (' + expression + ')')();
+                
+                if (!isFinite(result)) {
+                    alert('計算エラー: 結果が無限大または非数値です');
+                    return;
+                }
+                
+                display.value = result;
+                currentInput = result.toString();
+                operator = '';
+                previousInput = '';
+                
+            } catch (error) {
+                alert('計算エラー: 式が正しくありません');
+                console.error('Calculation error:', error);
+            }
+        }
+
+        function clearDisplay() {
+            display.value = '';
+            currentInput = '';
+            operator = '';
+            previousInput = '';
+        }
+
+        function deleteLast() {
+            if (display.value.length > 0) {
+                display.value = display.value.slice(0, -1);
+                currentInput = display.value;
+            }
+        }
+
+        // メモリ機能
+        function memoryStore() {
+            const value = getCurrentDisplayValue();
+            if (value !== null) {
+                memory = value;
+                updateMemoryIndicator();
+            }
+        }
+
+        function memoryRecall() {
+            if (memory !== 0) {
+                clearCurrentInput();
+                currentInput = memory.toString();
+                display.value = currentInput;
+            }
+        }
+
+        function memoryAdd() {
+            const value = getCurrentDisplayValue();
+            if (value !== null) {
+                memory += value;
+                updateMemoryIndicator();
+            }
+        }
+
+        function memorySubtract() {
+            const value = getCurrentDisplayValue();
+            if (value !== null) {
+                memory -= value;
+                updateMemoryIndicator();
+            }
+        }
+
+        function memoryClear() {
+            memory = 0;
+            updateMemoryIndicator();
+        }
+
+        function getCurrentDisplayValue() {
+            let value;
+            if (currentInput !== '') {
+                value = parseFloat(currentInput);
+            } else if (display.value !== '' && !isNaN(parseFloat(display.value))) {
+                value = parseFloat(display.value);
+            } else {
+                return null;
+            }
+            return isNaN(value) ? null : value;
+        }
+
+        function clearCurrentInput() {
+            currentInput = '';
+            operator = '';
+            previousInput = '';
+        }
+
+        function updateMemoryIndicator() {
+            if (memory !== 0) {
+                memoryIndicator.textContent = `📝 メモリ: ${memory}`;
+                memoryIndicator.style.color = '#28a745';
+            } else {
+                memoryIndicator.textContent = '\u00A0'; // 非破壊スペースで高さを維持
+                memoryIndicator.style.color = 'transparent';
+            }
+        }
+
+        // キーボード入力対応
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            const ctrlKey = event.ctrlKey;
+            
+            if (key >= '0' && key <= '9' || key === '.') {
+                appendToDisplay(key);
+            } else if (['+', '-', '*', '/', '(', ')'].includes(key)) {
+                appendToDisplay(key);
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            }
+            // メモリ機能のキーボードショートカット
+            else if (ctrlKey && key.toLowerCase() === 's') {
+                event.preventDefault();
+                memoryStore();
+            } else if (ctrlKey && key.toLowerCase() === 'r') {
+                event.preventDefault();
+                memoryRecall();
+            } else if (ctrlKey && key.toLowerCase() === 'l') {
+                event.preventDefault();
+                memoryClear();
+            } else if (ctrlKey && key === '+') {
+                event.preventDefault();
+                memoryAdd();
+            } else if (ctrlKey && key === '-') {
+                event.preventDefault();
+                memorySubtract();
+            }
+        });
+
+        // 初期化：メモリ領域を確保
+        updateMemoryIndicator();
+    </script>
+</body>
+</html>

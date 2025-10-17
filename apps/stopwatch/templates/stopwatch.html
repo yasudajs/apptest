@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高機能ストップウォッチ</title>
+    <link rel="stylesheet" href="{{ url_for('stopwatch.static', filename='stopwatch.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="stopwatch">
+            <h1>🏃 高機能ストップウォッチ</h1>
+            <div class="time-display" id="display">00:00:00.000</div>
+            <div class="button-group">
+                <button id="startBtn" onclick="start()">スタート</button>
+                <button id="lapBtn" class="lap" onclick="recordLap()" disabled>ラップ</button>
+                <button id="stopBtn" onclick="stop()">ストップ</button>
+                <button id="resetBtn" class="reset" onclick="reset()">リセット</button>
+            </div>
+            <!-- CSV出力・ラップクリアボタンはラップ履歴の下に移動 -->
+        </div>
+        <div class="lap-times">
+            <h3>📊 ラップタイム記録</h3>
+            <div class="statistics">
+                <div class="stat-item">
+                    <div class="stat-label">総ラップ数</div>
+                    <div class="stat-value" id="totalLaps">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">最速ラップ</div>
+                    <div class="stat-value" id="bestLap">--:--:--</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">最遅ラップ</div>
+                    <div class="stat-value" id="worstLap">--:--:--</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">平均ラップ</div>
+                    <div class="stat-value" id="avgLap">--:--:--</div>
+                </div>
+            </div>
+            <div class="lap-list" id="lapList">
+                <div style="text-align: center; color: #6c757d; padding: 20px;">
+                    ラップタイムはここに表示されます
+                </div>
+            </div>
+            <div class="button-group" style="margin-top:16px; text-align:center;">
+                <button class="download" onclick="exportCSV()" disabled>📄 CSV出力</button>
+                <button class="reset" onclick="clearLaps()" disabled>ラップクリア</button>
+            </div>
+        </div>
+        <a href="/" class="back-link">← メインページに戻る</a>
+    </div>
+    <script src="{{ url_for('stopwatch.static', filename='stopwatch.js') }}"></script>
+</body>
+</html>

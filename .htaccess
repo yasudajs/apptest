@@ -1,0 +1,8 @@
+
+# シンプルなCGI転送設定（静的ファイル以外はindex.cgi/app.pyへ）
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /index.cgi/$1 [QSA,L]
+
+# ディレクトリブラウジング無効化
+Options -Indexes

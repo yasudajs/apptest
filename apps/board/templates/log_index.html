@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>過去ログ倉庫</title>
+    <link rel="stylesheet" href="{{ url_for('board.static', filename='board.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>過去ログ倉庫</h1>
+        
+        <div class="log-index">
+            {% if logs %}
+            <p>アーカイブされたログ一覧（古い順）:</p>
+            <ul class="log-list">
+                {% for log in logs %}
+                <li>
+                    <a href="/board/log/{{ log.num }}" class="log-link">
+                        ログ {{ log.num }} (投稿 {{ log.num }}_1 ～ {{ log.num }}_{{ log.count }}) - {{ log.count }}件
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>過去ログがまだありません。</p>
+            {% endif %}
+        </div>
+
+        <a href="/board" class="back-link">← 掲示板に戻る</a>
+    </div>
+</body>
+</html>

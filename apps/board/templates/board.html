@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掲示板</title>
+    <link rel="stylesheet" href="{{ url_for('board.static', filename='board.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>掲示板</h1>
+        
+        <!-- 投稿フォーム -->
+        <div class="post-form">
+            <h2>新規投稿</h2>
+            
+            {% if error %}
+            <div class="error-message">
+                ⚠️ {{ error }}
+            </div>
+            {% endif %}
+            
+            <form method="POST" action="/board/add">
+                <div class="form-group">
+                    <label for="name">名前（未入力は「名無しさん」）:</label>
+                    <input type="text" id="name" name="name" placeholder="名無しさん" maxlength="50" value="{{ saved_name or '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="content">本文:</label>
+                    <textarea id="content" name="content" placeholder="投稿内容を入力してください..." required></textarea>
+                </div>
+                <button type="submit">投稿</button>
+            </form>
+        </div>
+
+        <!-- 投稿一覧 -->
+        <div class="posts-list">
+            <div class="posts-header">
+                <h2>投稿一覧</h2>
+                <div class="posts-controls">
+                    <label for="post-limit">表示件数:</label>
+                    <select id="post-limit">
+                        <option value="10" selected>10件</option>
+                        <option value="20">20件</option>
+                        <option value="30">30件</option>
+                        <option value="50">50件</option>
+                        <option value="100">100件</option>
+                        <option value="999999">全て</option>
+                    </select>
+                    <span class="posts-divider">|</span>
+                    <a href="/board/logs" class="past-logs-link">過去ログ倉庫→</a>
+                </div>
+            </div>
+            {% if posts %}
+                {% for post in posts %}
+                <div class="post {% if post.is_deleted %}post-deleted{% endif %}" id="post-{{ post.post_id }}">
+                    <div class="post-header">
+                        <span class="post-number">{{ post.display_id }}</span>
+                        <span class="post-name">{{ post.name }}</span>
+                        <span class="post-time">{{ post.formatted_time }}</span>
+                        {% if post.can_delete %}
+                        <form method="POST" action="/board/delete" style="display:inline;">
+                            <input type="hidden" name="post_id" value="{{ post.post_id }}">
+                            <button type="submit" class="btn-delete" onclick="return confirm('本当に削除しますか？');">削除</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    <div class="post-content">{{ post.content }}</div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-posts">投稿がまだありません。最初の投稿をしてみてください！</p>
+            {% endif %}
+        </div>
+
+        <a href="/" class="back-link">← メインページに戻る</a>
+    </div>
+    <script src="{{ url_for('board.static', filename='board.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRコード生成</title>
+    <link rel="stylesheet" href="{{ url_for('qrcode.static', filename='qrcode.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📱 QRコード生成アプリ</h1>
+        <div class="instructions">
+            <p><strong>使い方：</strong> テキストエリアにQRコードにしたい文字列やURLを入力し、「QRコード生成」ボタンを押してください。</p>
+        </div>
+        {% if error_message %}
+        <div class="error-message">
+            ⚠️ {{ error_message }}
+        </div>
+        {% endif %}
+        <div class="input-form">
+            <form method="POST" action="/qrcode">
+                <textarea name="text" placeholder="QRコードにしたいテキストやURLを入力してください...">{{ text_input }}</textarea>
+                <button type="submit">QRコード生成</button>
+            </form>
+        </div>
+        {% if qr_result %}
+        <div class="qr-result">
+            <h2>生成されたQRコード</h2>
+            {{ qr_result|safe }}
+            <div class="actions">
+                <a class="btn" href="/qrcode/download?text={{ text_input }}">作成したQRコードをダウンロード</a>
+            </div>
+            <p><small>※ 右クリックで画像を保存することもできます</small></p>
+        </div>
+        {% endif %}
+        <a href="/" class="back-link">← メインページに戻る</a>
+    </div>
+    <script src="{{ url_for('qrcode.static', filename='qrcode.js') }}"></script>
+</body>
+</html>

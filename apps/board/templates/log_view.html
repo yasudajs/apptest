@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログ {{ log_num }}</title>
+    <link rel="stylesheet" href="{{ url_for('board.static', filename='board.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>ログ {{ log_num }} (投稿 {{ log_num }}_1 ～ {{ log_num }}_{{ posts|length }})</h1>
+        
+        <div class="log-viewer">
+            {% if posts %}
+            <div class="posts-list">
+                {% for post in posts %}
+                <div class="post {% if post.is_deleted %}post-deleted{% endif %}" id="post-{{ post.post_id }}">
+                    <div class="post-header">
+                        <span class="post-number">{{ post.display_id }}</span>
+                        <span class="post-name">{{ post.name }}</span>
+                        <span class="post-time">{{ post.formatted_time }}</span>
+                    </div>
+                    <div class="post-content">{{ post.content }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="no-posts">ログが見つかりません。</p>
+            {% endif %}
+        </div>
+
+        <div class="log-nav">
+            <a href="/board/logs" class="back-link">← ログ一覧に戻る</a>
+            <span class="nav-divider">|</span>
+            <a href="/board" class="back-link">← 掲示板に戻る</a>
+        </div>
+    </div>
+</body>
+</html>
