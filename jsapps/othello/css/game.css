@@ -1,0 +1,89 @@
+/* game.css - ゲーム固有のスタイル */
+.stone {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    color: transparent;
+}
+
+.stone.black {
+    background: radial-gradient(circle at 30% 30%, #333, #000);
+}
+
+.stone.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+    color: #333;
+}
+
+.stone.flipping {
+    animation: flip 0.5s ease-in-out;
+}
+
+@keyframes flip {
+    0% { transform: scaleX(1); }
+    50% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+}
+
+.popup-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.popup-message.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.popup-message.show .popup-content {
+    transform: scale(1);
+}
+
+.popup-message.game-end {
+    cursor: pointer;
+}
+
+.popup-message.game-end .popup-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 1.4em;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}

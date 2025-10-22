@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オセロゲーム</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="container">
+        <h1>オセロゲーム</h1>
+
+        <div class="game-info">
+            <div class="player-info">
+                <div class="player black-player">
+                    <span class="piece black-piece"></span>
+                    <span class="score" id="black-score">2</span>
+                </div>
+                <div class="player white-player">
+                    <span class="piece white-piece"></span>
+                    <span class="score" id="white-score">2</span>
+                </div>
+            </div>
+            <div class="current-player" id="current-player">現在のプレイヤー: <span class="current-player-piece black" id="current-player-piece"></span></div>
+        </div>
+
+        <div class="board">
+            <!-- 8x8のボード (JavaScriptで生成) -->
+        </div>
+
+        <div class="controls">
+            <button id="reset-btn">リセット</button>
+            <button id="pass-btn">パス</button>
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <!-- ポップアップメッセージ -->
+        <div class="popup-message" id="popup-message">
+            <div class="popup-content">
+                <span id="popup-text"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/game.js"></script>
+    <script src="scripts/script.js"></script>
+</body>
+</html>

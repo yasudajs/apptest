@@ -1,0 +1,111 @@
+/* components.css - コンポーネント固有のスタイル */
+.player-info {
+    display: flex;
+    gap: 20px;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.piece {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    color: transparent;
+    flex-shrink: 0;
+}
+
+.black-piece {
+    background: radial-gradient(circle at 30% 30%, #333, #000);
+}
+
+.white-piece {
+    background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+}
+
+.score {
+    font-size: 1.2em;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}
+
+.current-player-piece {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    color: transparent;
+}
+
+.current-player-piece.black {
+    background: radial-gradient(circle at 30% 30%, #333, #000);
+}
+
+.current-player-piece.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+}
+
+.cell {
+    background: #4a7c2a;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.cell:hover {
+    background: #5a8f3a;
+    transform: scale(0.95);
+}
+
+.cell.available {
+    background: #6ba845;
+    box-shadow: inset 0 0 10px rgba(255,255,0,0.3);
+}
+
+.cell.available:hover {
+    background: #7bb855;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background: #667eea;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+button:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+button:active {
+    transform: translateY(0);
+}
