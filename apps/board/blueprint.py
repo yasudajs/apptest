@@ -88,8 +88,14 @@ def check_can_delete(post):
 def index():
     session_id = get_or_create_session_id()
     poster_name = get_poster_name()
+
+    # 表示件数を取得（デフォルト10件）
+    limit = request.args.get('limit', 10, type=int)
+    if limit not in [10, 20, 30, 50, 100]:
+        limit = 10
+
     with get_db() as db:
-        posts = db.execute('SELECT *, (log_id || "_" || local_id) AS post_id FROM posts ORDER BY created_at DESC LIMIT 100').fetchall()
+        posts = db.execute('SELECT *, (log_id || "_" || local_id) AS post_id FROM posts ORDER BY id DESC LIMIT ?', (limit,)).fetchall()
     posts_display = []
     for post in posts:
         post_display = dict(post)
@@ -99,7 +105,9 @@ def index():
             post_display['content'] = '（削除されました。）'
         post_display['can_delete'] = check_can_delete(post)
         posts_display.append(post_display)
-    response = make_response(render_template('board.html', posts=posts_display, saved_name=poster_name))
+    # 逆順にして古いものが上になるようにする
+    posts_display.reverse()
+    response = make_response(render_template('board.html', posts=posts_display, saved_name=poster_name, current_limit=limit))
     response.set_cookie('user_session_id', session_id, max_age=86400*7)
     return response
 
@@ -141,7 +149,7 @@ def delete_post():
             error_msg = '投稿IDが無効です。'
     if error_msg:
         with get_db() as db:
-            posts = db.execute('SELECT *, (log_id || "_" || local_id) AS post_id FROM posts ORDER BY created_at DESC LIMIT 100').fetchall()
+            posts = db.execute('SELECT *, (log_id || "_" || local_id) AS post_id FROM posts ORDER BY id DESC LIMIT 100').fetchall()
         posts_display = []
         for p in posts:
             p_display = dict(p)
@@ -151,6 +159,8 @@ def delete_post():
                 p_display['content'] = '（削除されました。）'
             p_display['can_delete'] = check_can_delete(p)
             posts_display.append(p_display)
+        # 逆順にして古いものが上になるようにする
+        posts_display.reverse()
         response = make_response(render_template('board.html', posts=posts_display, error=error_msg, saved_name=get_poster_name()))
         session_id = get_or_create_session_id()
         response.set_cookie('user_session_id', session_id, max_age=86400*7)
@@ -169,7 +179,7 @@ def delete_post():
 @board_bp.route('/api/list')
 def api_list():
     with get_db() as db:
-        posts = db.execute('SELECT *, (log_id || "_" || local_id) AS post_id FROM posts ORDER BY created_at DESC LIMIT 100').fetchall()
+        posts = db.execute('SELECT *, (log_id || "_" || local_id) AS post_id FROM posts ORDER BY id DESC LIMIT 100').fetchall()
     posts_display = []
     for post in posts:
         post_display = dict(post)
@@ -178,6 +188,8 @@ def api_list():
         if post['deleted_at']:
             post_display['content'] = '（削除されました。）'
         posts_display.append(post_display)
+    # 逆順にして古いものが上になるようにする
+    posts_display.reverse()
     return jsonify(posts_display)
 
 @board_bp.route('/logs')

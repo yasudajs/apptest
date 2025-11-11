@@ -10,33 +10,10 @@
     <div class="container">
         <h1>掲示板</h1>
         
-        <!-- 投稿フォーム -->
-        <div class="post-form">
-            <h2>新規投稿</h2>
-            
-            {% if error %}
-            <div class="error-message">
-                ⚠️ {{ error }}
-            </div>
-            {% endif %}
-            
-            <form method="POST" action="/board/add">
-                <div class="form-group">
-                    <label for="name">名前（未入力は「名無しさん」）:</label>
-                    <input type="text" id="name" name="name" placeholder="名無しさん" maxlength="50" value="{{ saved_name or '' }}">
-                </div>
-                <div class="form-group">
-                    <label for="content">本文:</label>
-                    <textarea id="content" name="content" placeholder="投稿内容を入力してください..." required></textarea>
-                </div>
-                <button type="submit">投稿</button>
-            </form>
-        </div>
-
         <!-- 投稿一覧 -->
         <div class="posts-list">
             <div class="posts-header">
-                <h2>投稿一覧（最新100件）</h2>
+                <h2>投稿一覧（最新{{ current_limit }}件）</h2>
                 <div class="posts-controls">
                     <label for="post-limit">表示件数:</label>
                     <select id="post-limit">
@@ -70,6 +47,29 @@
             {% else %}
                 <p class="no-posts">投稿がまだありません。最初の投稿をしてみてください！</p>
             {% endif %}
+        </div>
+
+        <!-- 投稿フォーム -->
+        <div class="post-form">
+            <h2>新規投稿</h2>
+            
+            {% if error %}
+            <div class="error-message">
+                ⚠️ {{ error }}
+            </div>
+            {% endif %}
+            
+            <form method="POST" action="/board/add">
+                <div class="form-group">
+                    <label for="name">名前（未入力は「名無しさん」）:</label>
+                    <input type="text" id="name" name="name" placeholder="名無しさん" maxlength="50" value="{{ saved_name or '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="content">本文:</label>
+                    <textarea id="content" name="content" placeholder="投稿内容を入力してください..." required></textarea>
+                </div>
+                <button type="submit">投稿</button>
+            </form>
         </div>
 
         <a href="/" class="back-link">← メインページに戻る</a>
