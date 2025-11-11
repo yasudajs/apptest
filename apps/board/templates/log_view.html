@@ -16,7 +16,7 @@
                 <div class="post {% if post.is_deleted %}post-deleted{% endif %}" id="post-{{ post.post_id }}">
                     <div class="post-header">
                         <span class="post-number">{{ post.display_id }}</span>
-                        <span class="post-name">{{ post.name }}</span>
+                        <span class="post-name">{{ post.username }}</span>
                         <span class="post-time">{{ post.formatted_time }}</span>
                     </div>
                     <div class="post-content">{{ post.content }}</div>
