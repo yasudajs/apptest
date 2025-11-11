@@ -24,9 +24,10 @@ Boardアプリの全投稿データを管理するテーブル。JSONファイ�
 - 推奨インデックス: log_id, local_id, created_at（ソート・フィルタ用）
 
 ### 使用例
-- 最新投稿取得: `SELECT *, (log_id || '_' || local_id) AS post_id FROM posts ORDER BY created_at DESC LIMIT 100`
+- 最新投稿取得: `SELECT *, (log_id || '_' || local_id) AS post_id FROM posts ORDER BY id DESC LIMIT 100`
 - 投稿追加: `INSERT INTO posts (log_id, local_id, username, content, created_at, session_id) VALUES (?, ?, ?, ?, datetime("now"), ?)`
-- 世代別取得: `SELECT * FROM posts WHERE log_id = 1 ORDER BY local_id`
+- 世代別取得: `SELECT * FROM posts WHERE log_id = ? ORDER BY local_id`
+- ログ一覧取得（100件ちょうど）: `SELECT log_id, COUNT(*) as count, (SELECT created_at FROM posts WHERE log_id = p.log_id AND local_id = 100) as last_created_at FROM posts p GROUP BY log_id HAVING COUNT(*) = 100 ORDER BY log_id`
 
 ### 注意点
 - 全投稿データを保持するため、データ量増加に注意。
