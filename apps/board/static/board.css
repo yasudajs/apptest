@@ -161,7 +161,8 @@ h2 {
 }
 
 .post {
-    border: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
     margin-bottom: 10px;
     background: white;
     padding: 0;
