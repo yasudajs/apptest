@@ -1,6 +1,7 @@
 // game.js - ゲームロジック
 class OthelloGame {
-    constructor() {
+    constructor(mode = 'two') {
+        this.mode = mode; // 'single' or 'two'
         this.board = Array(8).fill().map(() => Array(8).fill(null));
         this.currentPlayer = 'black';
         this.scores = { black: 2, white: 2 };
@@ -11,6 +12,10 @@ class OthelloGame {
         // updateDisplayとshowMessageはscript.jsで割り当てられた後に呼び出す
         setTimeout(() => {
             this.updateDisplay();
+            // 1人プレイで白が先手の時はCPUの手を打つ
+            if (this.mode === 'single' && this.currentPlayer === 'white') {
+                setTimeout(() => this.makeCPUMove(), 500);
+            }
         }, 0);
     }
 
@@ -58,7 +63,16 @@ class OthelloGame {
                 setTimeout(() => {
                     this.switchPlayer();
                     this.updateDisplay();
+                    // パス後のCPUターン
+                    if (this.mode === 'single' && this.currentPlayer === 'white') {
+                        setTimeout(() => this.makeCPUMove(), 1000);
+                    }
                 }, 1000);
+            } else {
+                // 次のプレイヤーのターン
+                if (this.mode === 'single' && this.currentPlayer === 'white') {
+                    setTimeout(() => this.makeCPUMove(), 500);
+                }
             }
         } else {
             setTimeout(() => this.showMessage('そこは置けません。'), 0);
@@ -188,6 +202,11 @@ class OthelloGame {
 
         if (this.isGameOver()) {
             this.showGameResult();
+        } else {
+            // パス後のCPUターン
+            if (this.mode === 'single' && this.currentPlayer === 'white') {
+                setTimeout(() => this.makeCPUMove(), 1000);
+            }
         }
     }
 
@@ -200,18 +219,89 @@ class OthelloGame {
         setTimeout(() => {
             this.updateDisplay();
             // リセット時はメッセージを表示しない
+            // 1人プレイで白が先手の時はCPUの手を打つ
+            if (this.mode === 'single' && this.currentPlayer === 'white') {
+                setTimeout(() => this.makeCPUMove(), 500);
+            }
         }, 0);
     }
 
-    // UI更新メソッド（script.jsでUIManagerに置き換えられる）
-    updateDisplay() {
-        // デフォルト実装（script.jsで上書きされる）
-        console.log('updateDisplay called');
+    // CPUの手を打つ
+    makeCPUMove() {
+        if (this.currentPlayer !== 'white' || this.mode !== 'single') return;
+
+        const validMoves = this.getValidMoves();
+        if (validMoves.length === 0) {
+            // CPUもパス
+            setTimeout(() => this.showMessage('CPUがパスします。'), 0);
+            setTimeout(() => {
+                this.switchPlayer();
+                this.updateDisplay();
+            }, 1000);
+            return;
+        }
+
+        // 最も多くの石をひっくり返す手を選択（シンプルな戦略）
+        let bestMove = null;
+        let maxFlips = 0;
+
+        for (const [row, col] of validMoves) {
+            const flips = this.calculateFlips(row, col);
+            if (flips > maxFlips) {
+                maxFlips = flips;
+                bestMove = [row, col];
+            }
+        }
+
+        // ベストムーブがない場合はランダム
+        if (!bestMove) {
+            bestMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+        }
+
+        const [row, col] = bestMove;
+        setTimeout(() => {
+            this.placeStone(row, col);
+            this.flipStones(row, col);
+            this.switchPlayer();
+            this.updateDisplay();
+
+            if (this.isGameOver()) {
+                this.showGameResult();
+            } else if (!this.hasValidMoves()) {
+                setTimeout(() => this.showMessage('パスします。相手のターンです。'), 0);
+                setTimeout(() => {
+                    this.switchPlayer();
+                    this.updateDisplay();
+                }, 1000);
+            }
+        }, 500);
     }
 
-    // メッセージ表示メソッド（script.jsでUIManagerに置き換えられる）
-    showMessage(message) {
-        // デフォルト実装（script.jsで上書きされる）
-        console.log('Message:', message);
+    // 有効な手のリストを取得
+    getValidMoves() {
+        const moves = [];
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                if (this.canPlaceStone(row, col)) {
+                    moves.push([row, col]);
+                }
+            }
+        }
+        return moves;
+    }
+
+    // 指定位置に置いた場合のひっくり返す石の数を計算
+    calculateFlips(row, col) {
+        let totalFlips = 0;
+        const directions = [
+            [-1, -1], [-1, 0], [-1, 1],
+            [0, -1],           [0, 1],
+            [1, -1],  [1, 0],  [1, 1]
+        ];
+
+        for (const [dRow, dCol] of directions) {
+            totalFlips += this.getStonesToFlip(row, col, dRow, dCol).length;
+        }
+        return totalFlips;
     }
 }

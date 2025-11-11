@@ -4,13 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>オセロゲーム</title>
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/game.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="/jsapps/othello/css/base.css">
+    <link rel="stylesheet" href="/jsapps/othello/css/components.css">
+    <link rel="stylesheet" href="/jsapps/othello/css/game.css">
+    <link rel="stylesheet" href="/jsapps/othello/css/responsive.css">
 </head>
 <body>
-    <div class="container">
+    <div id="mode-selection" class="mode-selection">
+        <h1>オセロゲーム</h1>
+        <p>プレイモードを選択してください</p>
+        <div class="mode-buttons">
+            <button id="single-player-btn" class="mode-btn">1人プレイ (CPU対戦)</button>
+            <button id="two-player-btn" class="mode-btn">2人プレイ (人間同士)</button>
+        </div>
+    </div>
+
+    <div class="container hidden" id="game-container">
         <h1>オセロゲーム</h1>
 
         <div class="game-info">
@@ -34,6 +43,7 @@
         <div class="controls">
             <button id="reset-btn">リセット</button>
             <button id="pass-btn">パス</button>
+            <button id="back-to-menu-btn">メニューに戻る</button>
         </div>
 
         <div class="message" id="message"></div>
@@ -46,8 +56,8 @@
         </div>
     </div>
 
-    <script src="scripts/ui.js"></script>
-    <script src="scripts/game.js"></script>
-    <script src="scripts/script.js"></script>
+    <script src="/jsapps/othello/scripts/ui.js"></script>
+    <script src="/jsapps/othello/scripts/game.js"></script>
+    <script src="/jsapps/othello/scripts/script.js"></script>
 </body>
 </html>

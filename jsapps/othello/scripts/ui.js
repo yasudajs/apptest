@@ -32,11 +32,20 @@ class UIManager {
     }
 
     static updateCurrentPlayer(game) {
+        const currentPlayerDiv = document.getElementById('current-player');
         const currentPlayerPiece = document.getElementById('current-player-piece');
-        if (game.currentPlayer === 'black') {
-            currentPlayerPiece.className = 'current-player-piece black';
+
+        if (game.mode === 'single' && game.currentPlayer === 'white') {
+            currentPlayerDiv.innerHTML = '現在のターン: <span class="current-player-piece white" id="current-player-piece"></span> (CPU)';
+        } else if (game.mode === 'single' && game.currentPlayer === 'black') {
+            currentPlayerDiv.innerHTML = '現在のターン: <span class="current-player-piece black" id="current-player-piece"></span> (あなた)';
         } else {
-            currentPlayerPiece.className = 'current-player-piece white';
+            // 2人プレイ
+            if (game.currentPlayer === 'black') {
+                currentPlayerDiv.innerHTML = '現在のプレイヤー: <span class="current-player-piece black" id="current-player-piece"></span>';
+            } else {
+                currentPlayerDiv.innerHTML = '現在のプレイヤー: <span class="current-player-piece white" id="current-player-piece"></span>';
+            }
         }
     }
 
