@@ -1,7 +1,8 @@
 // game.js - ゲームロジック
 class OthelloGame {
-    constructor(mode = 'two') {
+    constructor(mode = 'two', playerColor = null) {
         this.mode = mode; // 'single' or 'two'
+        this.playerColor = playerColor; // 'black' or 'white' (1人プレイ時のみ)
         this.board = Array(8).fill().map(() => Array(8).fill(null));
         this.currentPlayer = 'black';
         this.scores = { black: 2, white: 2 };
@@ -9,13 +10,14 @@ class OthelloGame {
         this.initializeBoard();
         this.setupEventListeners();
 
+        // 1人プレイでプレイヤーが後攻の場合、CPUが先攻
+        if (this.mode === 'single' && this.playerColor === 'white') {
+            this.currentPlayer = 'black'; // CPU(黒)が先攻
+        }
+
         // updateDisplayとshowMessageはscript.jsで割り当てられた後に呼び出す
         setTimeout(() => {
             this.updateDisplay();
-            // 1人プレイで白が先手の時はCPUの手を打つ
-            if (this.mode === 'single' && this.currentPlayer === 'white') {
-                setTimeout(() => this.makeCPUMove(), 500);
-            }
         }, 0);
     }
 
@@ -51,29 +53,8 @@ class OthelloGame {
         }
 
         if (this.canPlaceStone(row, col)) {
-            this.placeStone(row, col);
-            this.flipStones(row, col);
-            this.switchPlayer();
-            this.updateDisplay();
-
-            if (this.isGameOver()) {
-                this.showGameResult();
-            } else if (!this.hasValidMoves()) {
-                setTimeout(() => this.showMessage('パスします。相手のターンです。'), 0);
-                setTimeout(() => {
-                    this.switchPlayer();
-                    this.updateDisplay();
-                    // パス後のCPUターン
-                    if (this.mode === 'single' && this.currentPlayer === 'white') {
-                        setTimeout(() => this.makeCPUMove(), 1000);
-                    }
-                }, 1000);
-            } else {
-                // 次のプレイヤーのターン
-                if (this.mode === 'single' && this.currentPlayer === 'white') {
-                    setTimeout(() => this.makeCPUMove(), 500);
-                }
-            }
+            // 共通の石配置処理を使用
+            this.processMove(row, col);
         } else {
             setTimeout(() => this.showMessage('そこは置けません。'), 0);
         }
@@ -203,9 +184,11 @@ class OthelloGame {
         if (this.isGameOver()) {
             this.showGameResult();
         } else {
-            // パス後のCPUターン
-            if (this.mode === 'single' && this.currentPlayer === 'white') {
-                setTimeout(() => this.makeCPUMove(), 1000);
+            // パス後のターン処理
+            if (this.mode === 'single') {
+                this.handleSinglePlayerTurn();
+            } else {
+                this.handleDoublePlayerTurn();
             }
         }
     }
@@ -216,19 +199,30 @@ class OthelloGame {
         this.scores = { black: 2, white: 2 };
         this.initializeBoard();
 
+        // 1人プレイでプレイヤーが後攻の場合、CPUが先攻
+        if (this.mode === 'single' && this.playerColor === 'white') {
+            this.currentPlayer = 'black'; // CPU(黒)が先攻
+        }
+
         setTimeout(() => {
             this.updateDisplay();
-            // リセット時はメッセージを表示しない
-            // 1人プレイで白が先手の時はCPUの手を打つ
-            if (this.mode === 'single' && this.currentPlayer === 'white') {
-                setTimeout(() => this.makeCPUMove(), 500);
+            // リセット後のターン処理
+            if (this.mode === 'single') {
+                this.handleSinglePlayerTurn();
+            } else {
+                this.handleDoublePlayerTurn();
             }
         }, 0);
     }
 
     // CPUの手を打つ
     makeCPUMove() {
-        if (this.currentPlayer !== 'white' || this.mode !== 'single') return;
+        // CPUのターンかどうかをチェック（プレイヤーの色と異なる色がCPU）
+        const isCpuTurn = this.mode === 'single' && this.currentPlayer !== this.playerColor;
+        
+        if (!isCpuTurn) {
+            return;
+        }
 
         const validMoves = this.getValidMoves();
         if (validMoves.length === 0) {
@@ -237,6 +231,7 @@ class OthelloGame {
             setTimeout(() => {
                 this.switchPlayer();
                 this.updateDisplay();
+                this.handleSinglePlayerTurn();
             }, 1000);
             return;
         }
@@ -272,7 +267,10 @@ class OthelloGame {
                 setTimeout(() => {
                     this.switchPlayer();
                     this.updateDisplay();
+                    this.handleSinglePlayerTurn();
                 }, 1000);
+            } else {
+                this.handleSinglePlayerTurn();
             }
         }, 500);
     }
@@ -290,18 +288,98 @@ class OthelloGame {
         return moves;
     }
 
+    // 石を置く共通処理
+    processMove(row, col) {
+        this.placeStone(row, col);
+        this.flipStones(row, col);
+        this.switchPlayer();
+        this.updateDisplay();
+
+        if (this.isGameOver()) {
+            this.showGameResult();
+        } else if (!this.hasValidMoves()) {
+            // モードに応じた自動パス処理
+            if (this.mode === 'two') {
+                setTimeout(() => {
+                    this.showMessage('置く場所が無いためパスします', false, true, () => {
+                        this.switchPlayer();
+                        this.updateDisplay();
+                        this.handleDoublePlayerTurn();
+                    });
+                }, 500);
+            } else {
+                // 1人プレイの場合、自動でパス
+                setTimeout(() => this.showMessage('パスします。相手のターンです。'), 0);
+                setTimeout(() => {
+                    this.switchPlayer();
+                    this.updateDisplay();
+                    this.handleSinglePlayerTurn();
+                }, 1000);
+            }
+        } else {
+            // 次のターン処理
+            if (this.mode === 'single') {
+                this.handleSinglePlayerTurn();
+            } else {
+                this.handleDoublePlayerTurn();
+            }
+        }
+    }
+
     // 指定位置に置いた場合のひっくり返す石の数を計算
     calculateFlips(row, col) {
         let totalFlips = 0;
         const directions = [
             [-1, -1], [-1, 0], [-1, 1],
             [0, -1],           [0, 1],
-            [1, -1],  [1, 0],  [1, 1]
+            [1, -1],  [1, 0],  [1,  1]
         ];
 
         for (const [dRow, dCol] of directions) {
             totalFlips += this.getStonesToFlip(row, col, dRow, dCol).length;
         }
         return totalFlips;
+    }
+
+    // 1人プレイのターン処理
+    handleSinglePlayerTurn() {
+        if (this.isPlayerTurn()) {
+            // 人間のターン: クリック有効
+            this.enableBoardClicks();
+        } else {
+            // CPUのターン: 自動手番
+            this.disableBoardClicks();
+            setTimeout(() => this.makeCPUMove(), 1000);
+        }
+    }
+
+    // 2人プレイのターン処理
+    handleDoublePlayerTurn() {
+        // 常に人間のターン: クリック有効
+        this.enableBoardClicks();
+    }
+
+    // プレイヤーのターンかどうかを判定
+    isPlayerTurn() {
+        return this.currentPlayer === this.playerColor;
+    }
+
+    // CPUのターンかどうかを判定
+    isCpuTurn() {
+        return this.mode === 'single' && !this.isPlayerTurn();
+    }
+
+    // ボードクリックを有効化
+    enableBoardClicks() {
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.style.pointerEvents = 'auto';
+        });
+    }
+
+    // ボードクリックを無効化
+    disableBoardClicks() {
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.style.pointerEvents = 'none';
+        });
     }
 }

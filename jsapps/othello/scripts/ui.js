@@ -21,7 +21,12 @@ class UIManager {
                 stoneElement.className = `stone ${stone}`;
                 cell.appendChild(stoneElement);
             } else if (game.canPlaceStone(row, col)) {
-                cell.classList.add('available');
+                // 1人プレイの場合、CPUのターン時はハイライトしない
+                if (game.mode === 'single' && game.currentPlayer !== game.playerColor) {
+                    // CPUのターン: ハイライトなし
+                } else {
+                    cell.classList.add('available');
+                }
             }
         });
     }
@@ -35,10 +40,12 @@ class UIManager {
         const currentPlayerDiv = document.getElementById('current-player');
         const currentPlayerPiece = document.getElementById('current-player-piece');
 
-        if (game.mode === 'single' && game.currentPlayer === 'white') {
-            currentPlayerDiv.innerHTML = '現在のターン: <span class="current-player-piece white" id="current-player-piece"></span> (CPU)';
-        } else if (game.mode === 'single' && game.currentPlayer === 'black') {
-            currentPlayerDiv.innerHTML = '現在のターン: <span class="current-player-piece black" id="current-player-piece"></span> (あなた)';
+        if (game.mode === 'single') {
+            if (game.currentPlayer === game.playerColor) {
+                currentPlayerDiv.innerHTML = '現在のターン: <span class="current-player-piece ' + game.currentPlayer + '" id="current-player-piece"></span> (あなた)';
+            } else {
+                currentPlayerDiv.innerHTML = '現在のターン: <span class="current-player-piece ' + game.currentPlayer + '" id="current-player-piece"></span> (CPU)';
+            }
         } else {
             // 2人プレイ
             if (game.currentPlayer === 'black') {
@@ -49,7 +56,7 @@ class UIManager {
         }
     }
 
-    static showMessage(message, isGameEnd = false) {
+    static showMessage(message, isGameEnd = false, showOkButton = false, onOkCallback = null) {
         // 空文字列の場合は何もしない
         if (!message || message.trim() === '') {
             return;
@@ -57,12 +64,14 @@ class UIManager {
 
         const popup = document.getElementById('popup-message');
         const popupText = document.getElementById('popup-text');
+        const okBtn = document.getElementById('popup-ok-btn');
 
         popupText.textContent = message;
 
         if (isGameEnd) {
             // ゲーム終了メッセージは特別に処理
             popup.classList.add('show', 'game-end');
+            okBtn.classList.add('hidden');
             // 10秒後に自動消去するか、ユーザーがクリックするまで表示
             const autoHide = setTimeout(() => {
                 if (popup.classList.contains('show')) {
@@ -78,9 +87,26 @@ class UIManager {
             };
             popup.addEventListener('click', clickHandler);
 
+        } else if (showOkButton) {
+            // OKボタン付きメッセージ
+            popup.classList.add('show');
+            okBtn.classList.remove('hidden');
+
+            // OKボタンのクリックイベント
+            const okHandler = () => {
+                popup.classList.remove('show');
+                okBtn.classList.add('hidden');
+                okBtn.removeEventListener('click', okHandler);
+                if (onOkCallback) {
+                    onOkCallback();
+                }
+            };
+            okBtn.addEventListener('click', okHandler);
+
         } else {
             // 通常メッセージは2秒で消す
             popup.classList.add('show');
+            okBtn.classList.add('hidden');
             setTimeout(() => {
                 popup.classList.remove('show');
             }, 2000);
@@ -89,6 +115,8 @@ class UIManager {
 
     static createBoard() {
         const board = document.querySelector('.board');
+        // 既存のセルをすべて削除
+        board.innerHTML = '';
         for (let i = 0; i < 64; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';

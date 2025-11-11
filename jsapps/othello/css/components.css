@@ -116,7 +116,7 @@ button:active {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    height: 100vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     text-align: center;
@@ -137,9 +137,11 @@ button:active {
 
 .mode-buttons {
     display: flex;
+    flex-direction: column;
     gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
 }
 
 .mode-btn {
@@ -163,3 +165,104 @@ button:active {
 .hidden {
     display: none !important;
 }
+
+/* 先行後攻選択画面 */
+.turn-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.turn-selection h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.turn-selection p {
+    font-size: 1.2em;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+.turn-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.turn-btn {
+    padding: 20px 40px;
+    font-size: 1.1em;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    min-width: 200px;
+}
+
+.turn-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.turn-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.turn-option .piece {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.back-btn {
+    padding: 10px 20px;
+    font-size: 0.9em;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ポータルリンク */
+.portal-link {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9em;
+}
+
+.portal-link:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+

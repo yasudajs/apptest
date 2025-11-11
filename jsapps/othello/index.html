@@ -17,6 +17,27 @@
             <button id="single-player-btn" class="mode-btn">1人プレイ (CPU対戦)</button>
             <button id="two-player-btn" class="mode-btn">2人プレイ (人間同士)</button>
         </div>
+        <a href="/" class="portal-link">ポータルに戻る</a>
+    </div>
+
+    <div id="turn-selection" class="turn-selection hidden">
+        <h1>先行後攻を選択</h1>
+        <p>あなたがどちらから始めますか？</p>
+        <div class="turn-buttons">
+            <button id="first-turn-btn" class="turn-btn">
+                <div class="turn-option">
+                    <div class="piece black-piece"></div>
+                    <span>先攻 (黒)</span>
+                </div>
+            </button>
+            <button id="second-turn-btn" class="turn-btn">
+                <div class="turn-option">
+                    <div class="piece white-piece"></div>
+                    <span>後攻 (白)</span>
+                </div>
+            </button>
+        </div>
+        <button id="back-to-mode-btn" class="back-btn">戻る</button>
     </div>
 
     <div class="container hidden" id="game-container">
@@ -52,6 +73,7 @@
         <div class="popup-message" id="popup-message">
             <div class="popup-content">
                 <span id="popup-text"></span>
+                <button id="popup-ok-btn" class="popup-ok-btn hidden">OK</button>
             </div>
         </div>
     </div>

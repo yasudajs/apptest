@@ -87,3 +87,21 @@
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
+
+.popup-ok-btn {
+    display: block;
+    margin: 15px auto 0;
+    padding: 8px 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.popup-ok-btn:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+}
