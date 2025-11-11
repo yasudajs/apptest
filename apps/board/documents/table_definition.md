@@ -14,6 +14,7 @@ Boardアプリの全投稿データを管理するテーブル。JSONファイ�
 | created_at  | TEXT       | NOT NULL              | 投稿日時（datetime("now")）   |
 | updated_at  | TEXT       | NULL                  | 修正日時（NULLで未修正）      |
 | deleted_at  | TEXT       | NULL                  | 削除日時（NULLで未削除、ソフトデリート用） |
+| session_id  | TEXT       | NULL                  | セッションID（削除権確認用）   |
 
 ### ユニーク制約
 - (log_id, local_id): ログ番号とローカル番号の組み合わせで重複防止。
@@ -24,7 +25,7 @@ Boardアプリの全投稿データを管理するテーブル。JSONファイ�
 
 ### 使用例
 - 最新投稿取得: `SELECT *, (log_id || '_' || local_id) AS post_id FROM posts ORDER BY created_at DESC LIMIT 100`
-- 投稿追加: `INSERT INTO posts (log_id, local_id, username, content, created_at) VALUES (?, ?, ?, ?, datetime("now"))`
+- 投稿追加: `INSERT INTO posts (log_id, local_id, username, content, created_at, session_id) VALUES (?, ?, ?, ?, datetime("now"), ?)`
 - 世代別取得: `SELECT * FROM posts WHERE log_id = 1 ORDER BY local_id`
 
 ### 注意点

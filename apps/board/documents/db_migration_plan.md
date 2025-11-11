@@ -10,27 +10,27 @@ Boardアプリのデータ管理をJSONファイルからSQLiteデータベー�
 
 ## 作業手順
 
-### 1. 準備
+### 1. 準備 ✅完了
 - SQLiteが利用可能か確認（requirements_server.txt参照）。
 
-### 2. DBテーブル定義
+### 2. DBテーブル定義 ✅完了
 - `table_definition.md`を参照。
 
-### 3. コード修正
+### 3. コード修正 ✅完了
 - `blueprint.py` を修正：
   - DATABASE パスを `board.db` に設定。
   - `get_db()`, `init_db()` 関数を追加。
   - 投稿追加・取得関数をDB操作に変更。
   - アーカイブ機能をDB内で管理（JSON出力不要）。
 
-### 4. テスト
+### 4. テスト ✅完了
 - ローカルでサーバー起動。
 - 投稿機能の動作確認（追加・表示）。
 - 過去投稿の読み込み機能確認（DBから全データ取得）。
 - 複数タブでの同時アクセステスト（競合確認）。
 
-### 5. 完了確認
-- JSONファイル（posts.json, log/フォルダ）の削除。
+### 5. 完了確認 ✅完了
+- JSONファイル（posts.json, log/フォルダ）の削除（不要ファイルなし）。
 - コミット・プッシュ。
 
 ## 注意点
@@ -41,3 +41,9 @@ Boardアプリのデータ管理をJSONファイルからSQLiteデータベー�
 ## リスク
 - DBファイルの破損リスク（バックアップ推奨）。
 - コード変更によるバグ発生（テスト必須）。
+
+## 移行結果
+- DBファイル `board.db` が正常に作成されました。
+- postsテーブルが正しく定義されています（log_id, local_id, username, content, created_at, updated_at, deleted_at, session_id）。
+- ソフトデリート機能（deleted_at）を実装。
+- Flaskサーバーが正常起動し、Webページ・APIが動作確認済み。
