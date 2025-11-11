@@ -195,8 +195,21 @@ def api_list():
 @board_bp.route('/logs')
 def view_logs():
     with get_db() as db:
-        logs = db.execute('SELECT log_id, COUNT(*) as count FROM posts GROUP BY log_id ORDER BY log_id').fetchall()
-    logs_display = [{'num': log['log_id'], 'count': log['count']} for log in logs]
+        # 100件ちょうどのログのみ取得
+        logs = db.execute('''
+            SELECT log_id, COUNT(*) as count, 
+                   (SELECT created_at FROM posts WHERE log_id = p.log_id AND local_id = 100) as last_created_at 
+            FROM posts p GROUP BY log_id HAVING COUNT(*) = 100 ORDER BY log_id
+        ''').fetchall()
+    logs_display = []
+    for log in logs:
+        log_dict = dict(log)
+        # 日時フォーマット
+        if log_dict.get('last_created_at'):
+            log_dict['formatted_last_time'] = format_datetime_for_display(log_dict['last_created_at'])
+        else:
+            log_dict['formatted_last_time'] = '不明'
+        logs_display.append(log_dict)
     return render_template('log_index.html', logs=logs_display)
 
 @board_bp.route('/log/<int:log_num>')

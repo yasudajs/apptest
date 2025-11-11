@@ -15,8 +15,8 @@
             <ul class="log-list">
                 {% for log in logs %}
                 <li>
-                    <a href="/board/log/{{ log.num }}" class="log-link">
-                        ログ {{ log.num }} (投稿 {{ log.num }}_1 ～ {{ log.num }}_{{ log.count }}) - {{ log.count }}件
+                    <a href="/board/log/{{ log.log_id }}" class="log-link">
+                        ログ {{ log.log_id }} (投稿 {{ log.log_id }}_1 ～ {{ log.log_id }}_{{ log.count }}) - {{ log.count }}件 [{{ log.formatted_last_time }}]
                     </a>
                 </li>
                 {% endfor %}
