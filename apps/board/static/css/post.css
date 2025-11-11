@@ -1,0 +1,131 @@
+/* post.css - 投稿表示関連 */
+
+.posts-list {
+    margin-bottom: 20px;
+}
+
+.posts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.posts-header h2 {
+    margin: 0;
+    flex: 1;
+}
+
+.posts-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.posts-controls label {
+    font-size: 14px;
+    color: #333;
+    font-weight: normal;
+}
+
+.posts-controls select {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: white;
+    color: #333;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.posts-controls select:focus {
+    outline: none;
+    border-color: #0066cc;
+}
+
+.posts-divider {
+    color: #ddd;
+    margin: 0 8px;
+}
+
+.past-logs-link {
+    color: #0066cc;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.past-logs-link:hover {
+    text-decoration: underline;
+    color: #0055aa;
+}
+
+.post {
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    margin-bottom: 10px;
+    background: white;
+    padding: 0;
+}
+
+.post.hidden {
+    display: none !important;
+}
+
+.post-deleted .post-content {
+    color: #999999;
+}
+
+.post-header {
+    background: #f9f9fa;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.post-number {
+    font-weight: bold;
+    color: #333;
+    min-width: 40px;
+}
+
+.post-name {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.post-time {
+    color: #666666;
+    font-size: 11px;
+}
+
+.btn-delete {
+    background: transparent;
+    color: #0066cc;
+    border: none;
+    padding: 0;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: auto;
+}
+
+.btn-delete:hover {
+    color: #ff0000;
+}
+
+.post-content {
+    padding: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.5;
+    color: #333;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+    text-align: left;
+}

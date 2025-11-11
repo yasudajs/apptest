@@ -1,0 +1,23 @@
+/* layout.css - レイアウト・コンテナ */
+
+.container {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+h1 {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    color: #333;
+}
+
+h2 {
+    font-size: 16px;
+    margin: 20px 0 10px 0;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}

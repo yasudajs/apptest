@@ -1,0 +1,144 @@
+/* responsive.css - レスポンシブデザイン */
+
+@media (max-width: 600px) {
+    body {
+        max-width: none;
+        width: 100%;
+        padding: 5px;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    .container {
+        padding: 10px;
+        max-width: none;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin: 0 0 15px 0;
+    }
+
+    h2 {
+        font-size: 15px;
+        margin: 15px 0 10px 0;
+    }
+
+    /* 投稿一覧ヘッダーを縦並びに */
+    .posts-header {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .posts-header h2 {
+        margin: 0 0 10px 0;
+        border: none;
+        padding: 0;
+    }
+
+    /* 表示件数とリンクを横並びに */
+    .posts-controls {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        white-space: normal;
+        width: 100%;
+    }
+
+    .posts-controls label {
+        display: inline;
+        margin-bottom: 0;
+        margin-right: 5px;
+        white-space: nowrap;
+        font-size: 13px;
+    }
+
+    .posts-controls select {
+        width: auto;
+        padding: 6px 8px;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    .posts-divider {
+        display: inline;
+        color: #ddd;
+        margin: 0 8px;
+    }
+
+    .past-logs-link {
+        display: inline-block;
+        text-align: center;
+        padding: 6px 10px;
+        border: 1px solid #0066cc;
+        border-radius: 3px;
+        background: white;
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 12px;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    .past-logs-link:hover {
+        background: #0066cc;
+        color: white;
+        text-decoration: none;
+    }
+
+    /* 投稿リスト */
+    .post-header {
+        flex-wrap: wrap;
+        gap: 5px;
+        font-size: 14px;
+    }
+
+    .post-number {
+        font-size: 14px;
+    }
+
+    .post-name {
+        font-size: 14px;
+    }
+
+    .post-time {
+        font-size: 13px;
+    }
+
+    .btn-delete {
+        margin-left: 0;
+        order: 5;
+        flex-basis: 100%;
+        text-align: right;
+        font-size: 13px;
+    }
+
+    /* フォーム */
+    .form-group input,
+    .form-group textarea {
+        font-size: 16px;
+    }
+
+    .post-form button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .back-link {
+        font-size: 14px;
+    }
+
+    .log-viewer {
+        width: 100%;
+        max-width: none;
+    }
+
+    .log-viewer .posts-list {
+        width: 100%;
+        max-width: none;
+    }
+}

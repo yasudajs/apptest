@@ -1,0 +1,92 @@
+/* log.css - 過去ログ関連 */
+
+.log-index {
+    background: #f9f9fa;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.log-index p {
+    font-size: 14px;
+    color: #333;
+    margin: 0 0 10px 0;
+}
+
+.log-list {
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.log-list li {
+    margin: 8px 0;
+    padding: 8px 10px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.log-link {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.log-link:hover {
+    text-decoration: underline;
+    color: #0055aa;
+}
+
+.log-header {
+    background: #f9f9fa;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 3px 3px 0 0;
+}
+
+.log-header h1 {
+    font-size: 24px;
+    margin: 0 0 20px 0;
+    color: #333;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.log-header h2 {
+    font-size: 16px;
+    margin: 20px 0 10px 0;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    color: #333;
+}
+
+.log-header p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.log-viewer {
+    margin-bottom: 20px;
+}
+
+.log-viewer .posts-list {
+    margin-bottom: 20px;
+}
+
+.log-nav {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.nav-divider {
+    color: #ddd;
+    margin: 0 10px;
+}
