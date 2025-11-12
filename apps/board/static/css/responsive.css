@@ -116,6 +116,35 @@
         font-size: 13px;
     }
 
+    .post-content {
+        font-size: 14px;
+    }
+
+    .log-header h1 {
+        font-size: 20px;
+        margin: 0 0 15px 0;
+    }
+
+    .log-header h2 {
+        font-size: 16px;
+        margin: 15px 0 10px 0;
+        border-bottom-width: 1px;
+    }
+
+    .log-header p {
+        font-size: 13px;
+    }
+
+    .log-list li,
+    .log-link {
+        font-size: 14px;
+    }
+
+    .log-nav,
+    .log-nav a {
+        font-size: 13px;
+    }
+
     /* フォーム */
     .form-group input,
     .form-group textarea {
